@@ -1,1 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~primeicons/primeicons.css";
+@import "~primeng-lts/resources/themes/saga-blue/theme.css";
+@import "~primeng-lts/resources/primeng.min.css";
+@import "~bootstrap/dist/css/bootstrap.min.css";
+
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import "~quill/dist/quill.core.css";
+@import "~quill/dist/quill.snow.css";
+
+:root {
+  --primary-color: #dc3545;
+  --dark-color: #333333;
+  --light-color: #f4f4f4;
+  --danger-color: #dc3545;
+  --success-color: #28a745;
+}
+
+.fs-title{
+  font-size: 25px;
+  font-weight: bold;
+  color: #79c718!important;
+}
