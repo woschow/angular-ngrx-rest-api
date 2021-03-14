@@ -16,7 +16,7 @@ export class ProductComponent implements OnInit {
   @Input("product") productProps: ProductInterface;
   viewTypes = ProductViewTypes;
   product: ProductInterface;
-  thumbnail: any | null;
+  thumbnail: any | undefined;
 
   constructor(private productsService: ProductsService,
               private sanitizer: DomSanitizer) { }
@@ -38,7 +38,7 @@ export class ProductComponent implements OnInit {
       product_url: this.productProps.product_url
     }
 
-    /*this.productsService.getProductPhoto(requestProductPhoto).subscribe(
+    this.productsService.getProductPhotoBlob(requestProductPhoto).subscribe(
       (baseImage: any) => {
 
 
@@ -49,7 +49,7 @@ export class ProductComponent implements OnInit {
         let objectURL = URL.createObjectURL(baseImage);
 
         this.thumbnail = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-      });*/
+      });
   }
 
 }

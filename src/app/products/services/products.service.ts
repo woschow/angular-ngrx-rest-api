@@ -43,6 +43,22 @@ export class ProductsService{
     return this.http.get<Blob>(url).pipe(map((response: Blob) => response), catchError(this.handleError));
   }
 
+  getProductPhotoBlob(request: GetProductPhotoRequestInterface): Observable<Blob>{
+
+    const url = environment.apiUrl + request.product_url + "/photo";
+
+    return this.http.get(url,  {responseType: 'blob'}).pipe(map(blob => blob), catchError(this.handleError));
+
+  /*    {
+      var urlCreator = window.URL;
+      return this.sanitizer.bypassSecurityTrustUrl(urlCreator.createObjectURL(blob));
+    }*/
+
+    //), catchError(this.handleError));
+
+    //return this.http.get<Blob>(url).pipe(map((response: Blob) => response), catchError(this.handleError));
+  }
+
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.

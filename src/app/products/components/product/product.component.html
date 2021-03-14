@@ -2,8 +2,8 @@
   <div *ngIf="viewTypeProps === viewTypes.GRID_ITEM" class="product-grid-item card">
     <div class="product-grid-item-content">
       <div class="image-container" style="float: left">
-        <!-- <img *ngIf="thumbnail !== null" [src]='thumbnail' [alt]="product.name"/> -->
-        <img src='assets/images/fruitGrid.png' [alt]="product.name"/>
+        <img *ngIf="thumbnail !== undefined" [src]='thumbnail' [alt]="product.name" class="image-grid"/>
+        <img *ngIf="thumbnail === undefined" src='assets/images/fruitGrid.png' [alt]="product.name"/>
       </div>
       <div class="product-list-detail" style="margin-left: 220px">
         <h5 class="p-mb-2">{{product.name}}</h5>
@@ -16,8 +16,8 @@
 
   <div *ngIf="viewTypeProps === viewTypes.LIST_ITEM" class="product-list-item">
     <div class="image-container" style="float: left">
-      <!-- <img *ngIf="thumbnail !== null" [src]='thumbnail' [alt]="product.name"/> -->
-      <img src='assets/images/fruitList.png' [alt]="product.name"/>
+      <img *ngIf="thumbnail !== undefined" [src]='thumbnail' [alt]="product.name" class="image-list"/>
+      <img *ngIf="thumbnail === undefined" src='assets/images/fruitList.png' [alt]="product.name"/>
     </div>
     <div class="product-list-detail" style="margin-left: 100px">
       <h5 class="p-mb-2">{{product.name}}</h5>
