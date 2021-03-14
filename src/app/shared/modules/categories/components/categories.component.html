@@ -1,0 +1,27 @@
+<div class="fs-title">Categories</div>
+<fs-loading *ngIf="(isLoading$ | async)"></fs-loading>
+
+<fs-error-message *ngIf="(error$ | async)" [message]="(error$ | async)" ></fs-error-message>
+
+<div class="sidebar" *ngIf="categories$ | async">
+
+  <p-dropdown *ngIf="viewTypeProps === viewTypes.DROP_DOWN"
+            [options]="(categories$ | async)"
+            [(ngModel)]="selectedCategory"
+            (ngModelChange)="onChange(selectedCategory)"
+            placeholder="Select a Category"
+            optionLabel="name"
+            [showClear]="true">
+  </p-dropdown>
+
+  <div *ngIf="viewTypeProps === viewTypes.TAGS_LIST" class="tag-list">
+      <a  *ngFor="let category of categories$ | async"
+          [routerLink]="['/products']" [queryParams]="{category: category.name}"
+          class="fs-tag-default fs-tag-pill"
+          >
+        <!-- [ngStyle]="{'background-color': getRandomColor()}" -->
+        {{ category.name }}
+      </a>
+  </div>
+
+</div>
