@@ -4,6 +4,7 @@ import {Observable, Subscription} from 'rxjs';
 import {select, Store} from '@ngrx/store';
 
 import {SelectItem} from 'primeng/api';
+import {ButtonModule} from 'primeng-lts/button';
 
 import {CategoriesViewTypes as CategoriesViewTypes} from '../../../shared/modules/categories/components/categoriesViewTypes';
 import {ProductViewTypes as ProductsViewTypes} from '../product/productViewTypes';
@@ -38,9 +39,6 @@ export class ProductsComponent implements OnInit {
 
   category: string;
 
-  // category$ : Observable<CategoryInterface>;
-  // category: CategoryInterface;
-
   constructor(private store: Store,
               private router: Router,
               private route: ActivatedRoute) { }
@@ -60,18 +58,6 @@ export class ProductsComponent implements OnInit {
     this.products$ = this.store.pipe(select(productsSelector))
     this.isLoading$ = this.store.pipe(select(isLoadingSelector))
     this.error$ = this.store.pipe(select(errorSelector))
-
-    /*this.category$ = this.store.pipe(select(selectedCategorySelector))
-
-    this.category$.subscribe(
-      o => this.category = o,
-      err => console.log('Err', err),
-      () => console.log('Complete'));
-
-    //this.category$.pipe(tap((val) => this.category = val));
-    console.log('Category', this.category)
-
-    console.log('Category$', this.category$)*/
   }
 
   fetchProducts(): void{

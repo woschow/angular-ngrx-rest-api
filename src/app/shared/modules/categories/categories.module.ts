@@ -16,13 +16,14 @@ import { CategoriesComponent } from './components/categories.component';
 import {LoadingModule} from '../loading/loading.module';
 import {ErrorMessageModule} from '../errorMessage/errorMessage.module';
 import {CategoriesService} from './services/categories.service';
+import { SelectCategoryEffect } from './store/effects/selectCategory.effect';
 
 @NgModule({
   declarations: [CategoriesComponent],
   imports: [
     CommonModule,
     StoreModule.forFeature('categories', reducer),
-    EffectsModule.forFeature([GetCategoriesEffect]),
+    EffectsModule.forFeature([GetCategoriesEffect, SelectCategoryEffect]),
     LoadingModule,
     DropdownModule,
     FormsModule,

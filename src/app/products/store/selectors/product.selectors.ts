@@ -1,21 +1,24 @@
 import {createFeatureSelector, createSelector} from '@ngrx/store';
-import {AppStateInterface} from '../../../shared/types/appState.interface';
 import {ProductsStateInterface} from '../../types/state/productsState.interface';
 
-export const productFeatureSelector = createFeatureSelector<AppStateInterface, ProductsStateInterface>('products')
+export const productFeatureSelector = createFeatureSelector<ProductsStateInterface>('products')
 
-
-/*export const productSelector = createSelector(
+export const productStateSelector = createSelector(
   productFeatureSelector,
-  (productsState: ProductsStateInterface) => categoriesState.data
+  (productsState: ProductsStateInterface) => productsState
 )
 
-export const isLoadingSelector = createSelector(
-  productFeatureSelector,
-  (categoriesState: CategoriesStateInterface) => categoriesState.isLoading
+export const productsSelector = createSelector(
+  productStateSelector,
+  (state:ProductsStateInterface)=> state.data
+)
+export const productByProductUrlSelector = (product_url:string) => createSelector(
+  productStateSelector,
+  (state:ProductsStateInterface)=> state.data.find(p=>p.product_url===product_url)
 )
 
-export const errorSelector = createSelector(
+export const isSubmittingSelector = createSelector(
   productFeatureSelector,
-  (categoriesState: CategoriesStateInterface) => categoriesState.error
-)*/
+  (state:ProductsStateInterface) => state.isSubmitting
+)
+

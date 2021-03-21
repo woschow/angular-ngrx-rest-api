@@ -49,4 +49,8 @@ export class CategoriesComponent implements OnInit {
     return '#' + ('000000' + color).slice(-6);
   }
 
+  clicked(category){
+    this.store.dispatch(categorySelectedAction({ category: category}));
+  }
+
 }

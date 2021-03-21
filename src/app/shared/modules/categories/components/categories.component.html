@@ -3,10 +3,10 @@
 
 <fs-error-message *ngIf="(error$ | async)" [message]="(error$ | async)" ></fs-error-message>
 
-<div class="sidebar" *ngIf="categories$ | async">
+<div class="sidebar" *ngIf="categories$ | async as categories">
 
   <p-dropdown *ngIf="viewTypeProps === viewTypes.DROP_DOWN"
-            [options]="(categories$ | async)"
+            [options]="categories"
             [(ngModel)]="selectedCategory"
             (ngModelChange)="onChange(selectedCategory)"
             placeholder="Select a Category"
@@ -15,10 +15,11 @@
   </p-dropdown>
 
   <div *ngIf="viewTypeProps === viewTypes.TAGS_LIST" class="tag-list">
-      <a  *ngFor="let category of categories$ | async"
-          [routerLink]="['/products']" [queryParams]="{category: category.name}"
+      <a  *ngFor="let category of categories"
+          (click)="clicked(category)"
           class="fs-tag-default fs-tag-pill"
           >
+          <!-- [routerLink]="['/products']" [queryParams]="{category: category.name}" -->
         <!-- [ngStyle]="{'background-color': getRandomColor()}" -->
         {{ category.name }}
       </a>

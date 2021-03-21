@@ -1,11 +1,12 @@
 import {ProductsStateInterface} from '../../types/state/productsState.interface';
 import {Action, createReducer, on} from '@ngrx/store';
-import {getProductsAction,
+import {createProductFailureAction, createProductSuccessAction, getProductsAction,
         getProductsFailureAction,
         getProductsSuccessAction } from '../actions/products.actions';
 
 const initialState: ProductsStateInterface = {
   isLoading: false,
+  isSubmitting: false,
   selectedCategory: null,
   data: null,
   error: null
@@ -18,6 +19,7 @@ const productsReducer = createReducer(
     (state): ProductsStateInterface => ({
       ...state,
       isLoading: true,
+      isSubmitting: false,
       selectedCategory: null,
       data: null
     })),
@@ -26,6 +28,7 @@ const productsReducer = createReducer(
     (state, action): ProductsStateInterface => ({
       ...state,
       isLoading: false,
+      isSubmitting: false,
       data: action.products
     })
   ),
@@ -34,14 +37,25 @@ const productsReducer = createReducer(
     (state): ProductsStateInterface => ({
       ...state,
       isLoading: false,
+      isSubmitting: false,
       data: null
     })
+  ),
+  on(
+    createProductSuccessAction,
+    (state): ProductsStateInterface => ({
+      ...state,
+      isSubmitting: false
+    })
+  ),
+
+  on(
+    createProductFailureAction,
+    (state, action): ProductsStateInterface => ({
+      ...state,
+      isSubmitting: false
+    })
   )
-/*  ),
-  on(getProductAction, (state): ProductsStateInterface => ({
-    ...state,
-    isLoading: true
-  }))*/
 );
 
 export function reducer(state: ProductsStateInterface, action: Action): ProductsStateInterface {

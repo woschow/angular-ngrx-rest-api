@@ -21,3 +21,8 @@ export const errorSelector = createSelector(
   categoriesFeatureSelector,
   (categoriesState: CategoriesStateInterface) => categoriesState.error
 )
+
+export const selectedCategorySelector = createSelector(
+  categoriesFeatureSelector,
+  (categoriesState: CategoriesStateInterface) => categoriesState.selectedCategory
+)

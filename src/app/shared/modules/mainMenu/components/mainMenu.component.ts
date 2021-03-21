@@ -18,31 +18,6 @@ export class MainMenuComponent implements OnInit {
 
   initializeValues(): void{
     this.items = [];
-    /*this.items = [
-      {
-        label:'Categories',
-        items:[
-          {
-            icon:'pi pi-fw pi-bars',
-            label:'List',
-            routerLink: ['products/categories']
-          }
-        ]
-      },
-      {
-        label:'Products',
-        items:[
-          {
-            label:'New'
-          },
-          {
-            icon:'pi pi-fw pi-bars',
-            label:'List',
-            routerLink: ['products/products']
-          }
-        ]
-      }
-    ];*/
   }
 
 }

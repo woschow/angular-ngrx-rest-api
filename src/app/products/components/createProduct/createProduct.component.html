@@ -1,0 +1,9 @@
+<div class="container page fs-margin-top">
+<p class="fs-title">Add Product</p>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
+    <br>
+    <br>
+    <p><p-button label="Save" (click)="onSubmit()"></p-button></p>
+  </form>
+</div>

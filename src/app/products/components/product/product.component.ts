@@ -1,55 +1,39 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {ProductInterface} from '../../types/model/product.interface';
-import {ProductViewTypes} from './productViewTypes';
-import {ProductsService} from '../../services/products.service';
-import {GetProductRequestInterface} from '../../types/service/getProductRequest.interface';
-import { DomSanitizer } from '@angular/platform-browser';
-import {GetProductPhotoRequestInterface} from '../../types/service/getProductPhotoRequest.interface';
+import {Component, Input, OnInit} from '@angular/core'
+import {ProductInterface} from '../../types/model/product.interface'
+import {ProductViewTypes} from './productViewTypes'
+import {ProductsStateInterface} from '../../types/state/productsState.interface'
+import {select, Store} from '@ngrx/store'
+import {productByProductUrlSelector} from '../../store/selectors/product.selectors'
+import {take} from 'rxjs/operators'
 
 @Component({
   selector: 'fs-product',
   templateUrl: './product.component.html',
-  styleUrls: ['./product.component.scss']
+  styleUrls: ['./product.component.scss'],
 })
 export class ProductComponent implements OnInit {
-  @Input("viewType") viewTypeProps: ProductViewTypes
-  @Input("product") productProps: ProductInterface;
-  viewTypes = ProductViewTypes;
-  product: ProductInterface;
-  thumbnail: any | undefined;
+  @Input('viewType') viewTypeProps: ProductViewTypes
+  @Input('product') productProps: ProductInterface
+  viewTypes = ProductViewTypes
+  product: ProductInterface
 
-  constructor(private productsService: ProductsService,
-              private sanitizer: DomSanitizer) { }
+  constructor(
+    private store: Store<ProductsStateInterface>
+  ) {}
 
   ngOnInit(): void {
-    this.fetchData();
+    this.initializeValues();
   }
 
-  fetchData(): void{
-    const requestProduct : GetProductRequestInterface = {
-      product_url: this.productProps.product_url
-    }
-    this.productsService.getProduct(requestProduct).subscribe(
-      (data: ProductInterface) => {
-        this.product = data
-      });
+  initializeValues() : void{
 
-    const requestProductPhoto : GetProductPhotoRequestInterface = {
-      product_url: this.productProps.product_url
-    }
-
-    this.productsService.getProductPhotoBlob(requestProductPhoto).subscribe(
-      (baseImage: any) => {
-
-
-        console.log('getProductPhoto');
-
-        //let objectURL = 'data:image/jpeg;base64,' + baseImage.image;
-
-        let objectURL = URL.createObjectURL(baseImage);
-
-        this.thumbnail = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-      });
+    const {product_url} = this.productProps
+    this.store
+      .pipe(
+        select((state) => productByProductUrlSelector(product_url)(state)),
+        take(1)
+      )
+      .subscribe((product) => (this.product = product))
   }
 
 }

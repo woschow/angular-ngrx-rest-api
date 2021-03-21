@@ -1,3 +1,4 @@
+
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 
@@ -7,18 +8,34 @@ import {catchError, map} from 'rxjs/operators';
 import {environment} from '../../../environments/environment';
 
 import {GetProductsRequestInterface} from '../types/service/getProductsRequest.interface';
-import {GetProductResponseInterface} from '../types/service/getProductResponse.interface';
 import {ProductInterface} from '../types/model/product.interface';
 import {GetProductsResponseInterface} from '../types/service/getProductsResponse.interface';
-import {GetProductRequestInterface} from '../types/service/getProductRequest.interface';
 import {GetProductPhotoRequestInterface} from '../types/service/getProductPhotoRequest.interface';
-import {ProductPhotoInterface} from '../types/model/productPhoto.interface';
-import {GetProductPhotoResponseInterface} from '../types/service/getProductPhotoResponse.interface';
+import {GetProductRequestInterface} from '../types/service/getProductRequest.interface';
+import {GetProductResponseInterface} from '../types/service/getProductResponse.interface';
+import { CreateProductRequestInterface } from '../types/service/createProductRequest.interface';
 
 @Injectable()
 export class ProductsService{
 
   constructor(private http: HttpClient ) {}
+
+  createProduct(productInput: CreateProductRequestInterface): Observable<ProductInterface> {
+
+    console.log('productInput', productInput);
+
+    const fullUrl = environment.apiUrl + '/shop/products'
+    return this.http
+      .post<ProductInterface>(fullUrl, productInput)
+      .pipe(
+        map((response: ProductInterface) => {
+
+          console.log('response', response);
+          
+          return response
+        })
+      )
+  }
 
   getProducts(request: GetProductsRequestInterface): Observable<ProductInterface[]>{
 
@@ -31,33 +48,24 @@ export class ProductsService{
 
     const product_url = environment.apiUrl + request.product_url;
 
-    console.log('product_url', product_url);
-
-    return this.http.get<GetProductResponseInterface>(product_url).pipe(map((response: GetProductResponseInterface) => response));
+    return this.http.get<GetProductResponseInterface>(product_url).pipe(map((response: GetProductResponseInterface) => ({...response, product_url: product_url})  ));
   }
 
   getProductPhoto(request: GetProductPhotoRequestInterface): Observable<Blob>{
 
-    const url = environment.apiUrl + request.product_url + "/photo";
+    const url = environment.apiUrl + request.product_url; //+ "/photo";
 
     return this.http.get<Blob>(url).pipe(map((response: Blob) => response), catchError(this.handleError));
   }
 
   getProductPhotoBlob(request: GetProductPhotoRequestInterface): Observable<Blob>{
 
-    const url = environment.apiUrl + request.product_url + "/photo";
+    const url = environment.apiUrl + request.product_url; //+ "/photo";
 
     return this.http.get(url,  {responseType: 'blob'}).pipe(map(blob => blob), catchError(this.handleError));
-
-  /*    {
-      var urlCreator = window.URL;
-      return this.sanitizer.bypassSecurityTrustUrl(urlCreator.createObjectURL(blob));
-    }*/
-
-    //), catchError(this.handleError));
-
-    //return this.http.get<Blob>(url).pipe(map((response: Blob) => response), catchError(this.handleError));
   }
+
+  
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
@@ -74,5 +82,7 @@ export class ProductsService{
     return throwError(
       'Something bad happened; please try again later.');
   }
+
+
 
 }

@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
-import {Router} from '@angular/router';
 
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 
-import {of} from 'rxjs';
-import {catchError, map, switchMap, tap} from 'rxjs/operators';
+import {async, forkJoin, Observable, of} from 'rxjs';
+import {catchError, map, switchMap} from 'rxjs/operators';
 
 import {ProductInterface} from '../../types/model/product.interface';
 import {ProductsService} from '../../services/products.service';
@@ -16,12 +15,17 @@ import { getProductsAction,
 @Injectable()
 
 export class GetProductsEffect {
-  register$ = createEffect(() => this.actions$.pipe(
+  getProducts$ = createEffect(() => this.actions$.pipe(
     ofType(getProductsAction),
     switchMap(({request}) => {
         return this.productsService.getProducts(request).pipe(
-            map((products: ProductInterface[]) => {
-              return getProductsSuccessAction({products: products})
+            switchMap((products: ProductInterface[]) => {
+            const allProducts = products.filter(p=>p.product_url != undefined && p.product_url !== 'undefined').map((product)=>{
+                const  {product_url}=product;
+                return this.productsService.getProduct({product_url})
+              })
+              const allResolvedProducts = forkJoin(allProducts)
+              return allResolvedProducts.pipe(map(products=> getProductsSuccessAction({ products})))
             }),
             catchError(() => {
               return of(getProductsFailureAction)
@@ -31,14 +35,6 @@ export class GetProductsEffect {
     })
   ))
 
- /*redirectAfterCategorySelected$ = createEffect(() => this.actions$.pipe(
-    ofType(categorySelectedAction),
-    tap(()=> this.router.navigateByUrl('/products/products'))
-    ),
-    {dispatch: false}
-  )
-*/
   constructor(private actions$: Actions,
-              private productsService: ProductsService,
-              private router: Router){}
+              private productsService: ProductsService){}
 }
